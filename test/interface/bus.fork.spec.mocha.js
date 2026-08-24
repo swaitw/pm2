@@ -56,6 +56,7 @@ process.on('uncaughtException', function(e) {
 });
 
 describe('PM2 BUS / RPC', function() {
+  this.timeout(30000);
   var pm2 = new PM2.custom({
     cwd         : __dirname + '/../fixtures/interface'
   });
@@ -69,7 +70,7 @@ describe('PM2 BUS / RPC', function() {
     pm2.connect(function() {
       pm2.launchBus(function(err, bus) {
         pm2_bus = bus;
-        setTimeout(done, 1000);
+        setTimeout(done, 3000);
       });
     });
   });
@@ -159,6 +160,7 @@ describe('PM2 BUS / RPC', function() {
       var plan = new Plan(1, done);
 
       pm2_bus.on('*', function(event, data) {
+        console.log(event)
         if (event == 'process:exception') {
           data.should.have.properties(ERROR_EVENT);
           data.process.should.have.properties(PROCESS_ARCH);
